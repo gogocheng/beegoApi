@@ -50,3 +50,30 @@ func (this *UserController) SaveRegister() {
 		}
 	}
 }
+
+//用户登录
+// @router /login/do [*]
+func (this *UserController) LoginDo() {
+	mobile := this.GetString("mobile")
+	password := this.GetString("password")
+	if "" == mobile {
+		this.Data["json"] = ReturnError(4001, "手机号不能为空")
+		this.ServeJSON()
+	}
+	if "" == password {
+		this.Data["json"] = ReturnError(4001, "密码不能为空")
+		this.ServeJSON()
+	}
+	uid, name := models.IsMobileLoginIn(mobile, MD5V(password))
+	if uid != 0 {
+		m := make(map[string]interface{})
+		m["uid"] = uid
+		m["username"] = name
+		this.Data["json"] = ReturnSuccess(0, "登录成功", m, 1)
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = ReturnError(4004, "手机号或密码不正确")
+		this.ServeJSON()
+	}
+
+}
