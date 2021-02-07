@@ -6,6 +6,7 @@ import (
 	"regexp"
 )
 
+//用户相关
 type UserController struct {
 	beego.Controller
 }
