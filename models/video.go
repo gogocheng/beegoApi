@@ -33,6 +33,17 @@ type VideoData struct {
 	Comment       int
 }
 
+// 剧集
+type Episodes struct {
+	Id            int
+	Title         string
+	AddTime       int64
+	Num           int
+	PlayUrl       string
+	Comment       int
+	AliyunVideoId string
+}
+
 func init() {
 	orm.RegisterModel(new(Video))
 }
@@ -108,4 +119,19 @@ func GetChannelVideoList(channelId int, regionId int, typeId int, end string, so
 	qs = qs.Limit(limit, offset)
 	_, err := qs.Values(&videos, "id", "title", "sub_title", "img", "img1", "episodes_count", "is_end")
 	return nums, videos, err
+}
+
+func GetVideoInfo(videoId int) (Video, error) {
+	o := orm.NewOrm()
+	var video Video
+	err := o.Raw("select * from video where id=? limit 1", videoId).QueryRow(&video)
+	return video, err
+}
+
+//获取视频剧集列表
+func GetVideoEpisodesList(videoId int) (int64, []Episodes, error) {
+	o := orm.NewOrm()
+	var episodes []Episodes
+	num, err := o.Raw("select id,title,add_time,num,play_url,comment from video_episodes where video_id=? order by num asc", videoId).QueryRows(&episodes)
+	return num, episodes, err
 }
