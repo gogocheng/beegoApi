@@ -7,6 +7,24 @@ import (
 
 func init() {
 
+	beego.GlobalControllerRouter["beegoApi/controllers:BaseController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:BaseController"],
+		beego.ControllerComments{
+			Method:           "ChannelRegion",
+			Router:           "/channel/region",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["beegoApi/controllers:BaseController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:BaseController"],
+		beego.ControllerComments{
+			Method:           "ChannelType",
+			Router:           "/channel/type",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["beegoApi/controllers:UserController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "LoginDo",
@@ -56,6 +74,15 @@ func init() {
 		beego.ControllerComments{
 			Method:           "GetChannelRecommendTypeList",
 			Router:           "/channel/recommend/type",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["beegoApi/controllers:VideoController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:VideoController"],
+		beego.ControllerComments{
+			Method:           "ChannelVideo",
+			Router:           "/channel/video",
 			AllowHTTPMethods: []string{"*"},
 			MethodParams:     param.Make(),
 			Filters:          nil,

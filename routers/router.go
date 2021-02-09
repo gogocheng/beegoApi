@@ -11,4 +11,6 @@ func init() {
 	beego.Include(&controllers.UserController{})
 	//视频
 	beego.Include(&controllers.VideoController{})
+
+	beego.Include(&controllers.BaseController{})
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/astaxie/beego"
 )
 
-//公共  类似基类
+//公共方法
 type CommonController struct {
 	beego.Controller
 }

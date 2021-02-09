@@ -92,3 +92,37 @@ func (this *VideoController) GetChannelRecommendTypeList() {
 	}
 
 }
+
+//根据传入参数获取视频列表
+// @router /channel/video [*]
+func (this *VideoController) ChannelVideo() {
+	channelId, _ := this.GetInt("channelId")
+	//地区
+	regionId, _ := this.GetInt("regionId")
+	//类型
+	typeId, _ := this.GetInt("typeId")
+	//状态
+	end := this.GetString("end")
+	//排序
+	sort := this.GetString("sort")
+	//页码信息
+	limit, _ := this.GetInt("limit")
+	offset, _ := this.GetInt("offset")
+
+	if 0 == channelId {
+		this.Data["json"] = ReturnError(4001, "必须指定频道")
+		this.ServeJSON()
+	}
+	if 0 == limit {
+		limit = 12
+	}
+	num, videos, err := models.GetChannelVideoList(channelId, regionId, typeId, end, sort, limit, offset)
+	if err == nil {
+		this.Data["json"] = ReturnSuccess(0, "success", videos, num)
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = ReturnError(4004, "没有相关内容")
+		this.ServeJSON()
+	}
+
+}
