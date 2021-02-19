@@ -146,7 +146,7 @@ func (this *VideoController) VideoInfo() {
 
 }
 
-//获取视频聚集列表
+//获取视频剧集列表
 // @router /video/episodes/list [*]
 func (this *VideoController) VideoEpisodesList() {
 	videoId, _ := this.GetInt("videoId")

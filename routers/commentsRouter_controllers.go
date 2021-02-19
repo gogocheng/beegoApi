@@ -25,6 +25,15 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["beegoApi/controllers:CommentController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:CommentController"],
+		beego.ControllerComments{
+			Method:           "List",
+			Router:           "/comment/list",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["beegoApi/controllers:UserController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "LoginDo",
