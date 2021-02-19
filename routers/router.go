@@ -14,5 +14,6 @@ func init() {
 	beego.Include(&controllers.VideoController{})
 	//评论
 	beego.Include(&controllers.CommentController{})
-
+	//排行榜
+	beego.Include(&controllers.TopController{})
 }

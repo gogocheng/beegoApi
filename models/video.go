@@ -135,3 +135,25 @@ func GetVideoEpisodesList(videoId int) (int64, []Episodes, error) {
 	num, err := o.Raw("select id,title,add_time,num,play_url,comment from video_episodes where video_id=? order by num asc", videoId).QueryRows(&episodes)
 	return num, episodes, err
 }
+
+//频道排行榜
+func GetChannelTop(channelId int) (int64, []VideoData, error) {
+	o := orm.NewOrm()
+	var (
+		videos []VideoData
+	)
+	num, err := o.Raw("select id,title,sub_title,img,img1,add_time,episodes_count,is_end from video where status=1"+
+		" and channel_id=? order by comment desc limit 10", channelId).QueryRows(&videos)
+	return num, videos, err
+}
+
+//类型排行榜
+func GetTypeTop(typeId int) (int64, []VideoData, error) {
+	o := orm.NewOrm()
+	var (
+		videos []VideoData
+	)
+	num, err := o.Raw("select id,title,sub_title,img,img1,add_time,episodes_count,is_end from video where status=1"+
+		" and type_id=? order by comment desc limit 10", typeId).QueryRows(&videos)
+	return num, videos, err
+}

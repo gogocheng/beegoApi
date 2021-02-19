@@ -34,6 +34,33 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["beegoApi/controllers:CommentController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:CommentController"],
+		beego.ControllerComments{
+			Method:           "Save",
+			Router:           "/comment/save",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["beegoApi/controllers:TopController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:TopController"],
+		beego.ControllerComments{
+			Method:           "ChannelTop",
+			Router:           "/channel/top",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["beegoApi/controllers:TopController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:TopController"],
+		beego.ControllerComments{
+			Method:           "TypeTop",
+			Router:           "/type/top",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["beegoApi/controllers:UserController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "LoginDo",
@@ -48,6 +75,15 @@ func init() {
 			Method:           "SaveRegister",
 			Router:           "/register/save",
 			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["beegoApi/controllers:UserController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:UserController"],
+		beego.ControllerComments{
+			Method:           "SendMessageDo",
+			Router:           "/send/message",
+			AllowHTTPMethods: []string{"*"},
 			MethodParams:     param.Make(),
 			Filters:          nil,
 			Params:           nil})

@@ -31,8 +31,25 @@ func GetCommentList(episodesId int, offset int, limit int) (int64, []Comment, er
 	return num, comments, err
 }
 
-//格式化时间
-func DateFormat(times int64) string {
-	video_time := time.Unix(times, 0)
-	return video_time.Format("2006-01-02")
+//添加
+func SaveComment(content string, uid int, episodesId int, videoId int) error {
+	o := orm.NewOrm()
+	var (
+		comment Comment
+	)
+	comment.Content = content
+	comment.UserId = uid
+	comment.EpisodesId = episodesId
+	comment.VideoId = videoId
+	comment.Status = 1
+	comment.Stamp = 0
+	comment.AddTime = time.Now().Unix()
+	_, err := o.Insert(&comment)
+	if err == nil {
+		//修改视频的总评论数
+		o.Raw("update video set comment=comment+1 where id=?", videoId).Exec()
+		//修改视频剧集的评论数
+		o.Raw("update video_episodes set comment=comment+1 where id=?", episodesId).Exec()
+	}
+	return err
 }

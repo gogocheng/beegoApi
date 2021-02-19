@@ -4,6 +4,8 @@ import (
 	"beegoApi/models"
 	"github.com/astaxie/beego"
 	"regexp"
+	"strconv"
+	"strings"
 )
 
 //用户相关
@@ -77,4 +79,32 @@ func (this *UserController) LoginDo() {
 		this.ServeJSON()
 	}
 
+}
+
+//批量发送消息
+// @router /send/message [*]
+func (this *UserController) SendMessageDo() {
+	uids := this.GetString("uids")
+	content := this.GetString("content")
+	if "" == uids {
+		this.Data["json"] = ReturnError(4001, "请填写接收用户")
+		this.ServeJSON()
+	}
+	if "" == content {
+		this.Data["json"] = ReturnError(4002, "内容不能为空")
+		this.ServeJSON()
+	}
+	messageId, err := models.SendMessageDo(content)
+	if err == nil {
+		uidConfig := strings.Split(uids, ",")
+		for _, v := range uidConfig {
+			userId, _ := strconv.Atoi(v)
+			models.SendMessageUser(userId, messageId)
+		}
+		this.Data["json"] = ReturnSuccess(0, "success", "", 1)
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = ReturnError(5000, "发送失败，请联系客服")
+		this.ServeJSON()
+	}
 }

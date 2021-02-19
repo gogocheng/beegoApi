@@ -45,7 +45,7 @@ func (this *CommentController) List() {
 			commentInfo.Id = v.Id
 			commentInfo.Content = v.Content
 			commentInfo.AddTime = v.AddTime
-			commentInfo.AddTimeTitle = models.DateFormat(v.AddTime)
+			commentInfo.AddTimeTitle = DateFormat(v.AddTime)
 			commentInfo.UserId = v.UserId
 			commentInfo.Stamp = v.Stamp
 			commentInfo.PraiseCount = v.PraiseCount
@@ -59,4 +59,40 @@ func (this *CommentController) List() {
 		this.Data["json"] = ReturnError(4004, "没有相关内容")
 		this.ServeJSON()
 	}
+}
+
+//发表 评论
+// @router /comment/save [*]
+func (this *CommentController) Save() {
+	content := this.GetString("content")
+	uid, _ := this.GetInt("uid")
+	//剧集id
+	episodesId, _ := this.GetInt("episodesId")
+	videoId, _ := this.GetInt("videoId")
+
+	if content == "" {
+		this.Data["json"] = ReturnError(4001, "内容不能为空")
+		this.ServeJSON()
+	}
+	if 0 == uid {
+		this.Data["json"] = ReturnError(4002, "请先登录")
+		this.ServeJSON()
+	}
+	if 0 == episodesId {
+		this.Data["json"] = ReturnError(4003, "必须指定剧集")
+		this.ServeJSON()
+	}
+	if 0 == videoId {
+		this.Data["json"] = ReturnError(4004, "必须指定视频")
+		this.ServeJSON()
+	}
+	err := models.SaveComment(content, uid, episodesId, videoId)
+	if err == nil {
+		this.Data["json"] = ReturnSuccess(0, "success", "", 1)
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = ReturnError(5000, err)
+		this.ServeJSON()
+	}
+
 }
