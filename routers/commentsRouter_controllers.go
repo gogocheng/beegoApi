@@ -7,6 +7,24 @@ import (
 
 func init() {
 
+	beego.GlobalControllerRouter["beegoApi/controllers:BarrageController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:BarrageController"],
+		beego.ControllerComments{
+			Method:           "Save",
+			Router:           "/barrage/save",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["beegoApi/controllers:BarrageController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:BarrageController"],
+		beego.ControllerComments{
+			Method:           "BarrageWs",
+			Router:           "/barrage/ws",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["beegoApi/controllers:BaseController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:BaseController"],
 		beego.ControllerComments{
 			Method:           "ChannelRegion",
@@ -128,6 +146,15 @@ func init() {
 		beego.ControllerComments{
 			Method:           "ChannelVideo",
 			Router:           "/channel/video",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["beegoApi/controllers:VideoController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:VideoController"],
+		beego.ControllerComments{
+			Method:           "UserVideo",
+			Router:           "/user/video",
 			AllowHTTPMethods: []string{"*"},
 			MethodParams:     param.Make(),
 			Filters:          nil,

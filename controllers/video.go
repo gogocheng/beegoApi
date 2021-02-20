@@ -163,3 +163,21 @@ func (this *VideoController) VideoEpisodesList() {
 		this.ServeJSON()
 	}
 }
+
+//我的视频管理
+// @router /user/video [*]
+func (this *VideoController) UserVideo() {
+	uid, _ := this.GetInt("uid")
+	if 0 == uid {
+		this.Data["json"] = ReturnError(4001, "必须指定用户")
+		this.ServeJSON()
+	}
+	num, videos, err := models.GetUserVideo(uid)
+	if err == nil {
+		this.Data["json"] = ReturnSuccess(0, "success", videos, num)
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = ReturnError(4004, "没有相关内容")
+		this.ServeJSON()
+	}
+}
