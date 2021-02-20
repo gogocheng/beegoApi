@@ -106,6 +106,15 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["beegoApi/controllers:UserController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:UserController"],
+		beego.ControllerComments{
+			Method:           "UploadVideo",
+			Router:           "user/upload",
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["beegoApi/controllers:VideoController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:VideoController"],
 		beego.ControllerComments{
 			Method:           "ChannelAdvert",
@@ -173,6 +182,15 @@ func init() {
 		beego.ControllerComments{
 			Method:           "VideoInfo",
 			Router:           "/video/info",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
+	beego.GlobalControllerRouter["beegoApi/controllers:VideoController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:VideoController"],
+		beego.ControllerComments{
+			Method:           "VideoSave",
+			Router:           "/video/save",
 			AllowHTTPMethods: []string{"*"},
 			MethodParams:     param.Make(),
 			Filters:          nil,

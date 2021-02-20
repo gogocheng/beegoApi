@@ -181,3 +181,49 @@ func (this *VideoController) UserVideo() {
 		this.ServeJSON()
 	}
 }
+
+//保存用户上传视频信息
+// @router /video/save [*]
+func (this *VideoController) VideoSave() {
+	playUrl := this.GetString("playUrl")
+	title := this.GetString("title")
+	subTitle := this.GetString("subTitle")
+	channelId, _ := this.GetInt("channelId")
+	typeId, _ := this.GetInt("typeId")
+	regionId, _ := this.GetInt("regionId")
+	uid, _ := this.GetInt("uid")
+	aliyunVideoId := this.GetString("aliyunVideoId")
+	if 0 == uid {
+		this.Data["json"] = ReturnError(4001, "请先登录")
+		this.ServeJSON()
+	}
+	if 0 == regionId {
+		this.Data["json"] = ReturnError(4001, "必须指定地区")
+		this.ServeJSON()
+	}
+	if 0 == channelId {
+		this.Data["json"] = ReturnError(4001, "必须指定频道")
+		this.ServeJSON()
+	}
+	if 0 == typeId {
+		this.Data["json"] = ReturnError(4002, "必须指定类型")
+		this.ServeJSON()
+	}
+	if "" == playUrl {
+		this.Data["json"] = ReturnError(4001, "视频地址为空，请重试")
+		this.ServeJSON()
+	}
+	if "" == title || "" == subTitle {
+		this.Data["json"] = ReturnError(4001, "标题不能为空")
+		this.ServeJSON()
+	}
+
+	err := models.SaveVideo(title, subTitle, channelId, regionId, typeId, playUrl, uid, aliyunVideoId)
+	if err == nil {
+		this.Data["json"] = ReturnSuccess(0, "success", nil, 1)
+		this.ServeJSON()
+	} else {
+		this.Data["json"] = ReturnError(5000, err)
+		this.ServeJSON()
+	}
+}

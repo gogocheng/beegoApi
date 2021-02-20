@@ -3,6 +3,8 @@ package controllers
 import (
 	"beegoApi/models"
 	"github.com/astaxie/beego"
+	"io/ioutil"
+	"log"
 	"regexp"
 	"strconv"
 	"strings"
@@ -105,6 +107,39 @@ func (this *UserController) SendMessageDo() {
 		this.ServeJSON()
 	} else {
 		this.Data["json"] = ReturnError(5000, "发送失败，请联系客服")
+		this.ServeJSON()
+	}
+}
+
+//上传视频文件
+// @router user/upload [post]
+func (this *UserController) UploadVideo() {
+	uid := this.GetString("uid")
+	if "" == uid {
+		this.Data["json"] = ReturnError(4001, "请先登录")
+		this.ServeJSON()
+	}
+	//文件流
+	file, header, _ := this.GetFile("file")
+	//转换为二进制
+	b, _ := ioutil.ReadAll(file)
+	//生成文件名
+	filename := strings.Split(header.Filename, ".")
+	filename[0] = GetVideoName(uid)
+	////保存路径
+	var fileDir = "./static/upload/" + filename[0] + "." + filename[1]
+	log.Println(fileDir)
+	//播放地址
+	//var playUrl = fileDir
+	err := ioutil.WriteFile(fileDir, b, 0777)
+	if err == nil {
+		m := make(map[string]interface{})
+		m["play_url"] = fileDir
+		this.Data["json"] = ReturnSuccess(0, "success", m, 1)
+		this.ServeJSON()
+	} else {
+		log.Println(err)
+		this.Data["json"] = ReturnError(4004, "上传失败")
 		this.ServeJSON()
 	}
 }
