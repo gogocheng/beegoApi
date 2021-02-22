@@ -1,7 +1,10 @@
 package models
 
 import (
+	redisClient "beegoApi/service/redis"
 	"github.com/astaxie/beego/orm"
+	"github.com/garyburd/redigo/redis"
+	"strconv"
 	"time"
 )
 
@@ -72,5 +75,33 @@ func GetUserInfo(uid int) (UserInfo, error) {
 	o := orm.NewOrm()
 	var user UserInfo
 	err := o.Raw("SELECT id,name,add_time,avatar FROM user WHERE id=? LIMIT 1", uid).QueryRow(&user)
+	return user, err
+}
+
+//redis 缓存 获取用户信息
+func RedisGetUserInfo(uid int) (UserInfo, error) {
+	var user UserInfo
+	conn := redisClient.PoolConnect()
+	defer conn.Close()
+	//定义redis key
+	redisKey := "vedio:uid:" + strconv.Itoa(uid)
+	//判断是否存在
+	exists, err := redis.Bool(conn.Do("exists", redisKey))
+	if exists {
+		res, _ := redis.Values(conn.Do("hgetall", redisKey))
+		err = redis.ScanStruct(res, &user)
+	} else {
+		//mysql中取数据
+		o := orm.NewOrm()
+		err := o.Raw("SELECT id,name,add_time,avatar FROM user WHERE id=? LIMIT 1", uid).QueryRow(&user)
+		if err == nil {
+			//保存到redis
+			_, err := conn.Do("hmset", redis.Args{redisKey}.AddFlat(user)...)
+			if err == nil {
+				//设置过期时间
+				conn.Do("expire", redisKey, 86400)
+			}
+		}
+	}
 	return user, err
 }

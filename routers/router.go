@@ -18,4 +18,6 @@ func init() {
 	beego.Include(&controllers.TopController{})
 	//彈幕
 	beego.Include(&controllers.BarrageController{})
+	//redis
+	beego.Include(&controllers.RedisDemoController{})
 }

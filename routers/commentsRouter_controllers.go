@@ -61,6 +61,15 @@ func init() {
 			Filters:          nil,
 			Params:           nil})
 
+	beego.GlobalControllerRouter["beegoApi/controllers:RedisDemoController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:RedisDemoController"],
+		beego.ControllerComments{
+			Method:           "Demo",
+			Router:           "/redis/demo",
+			AllowHTTPMethods: []string{"*"},
+			MethodParams:     param.Make(),
+			Filters:          nil,
+			Params:           nil})
+
 	beego.GlobalControllerRouter["beegoApi/controllers:TopController"] = append(beego.GlobalControllerRouter["beegoApi/controllers:TopController"],
 		beego.ControllerComments{
 			Method:           "ChannelTop",
